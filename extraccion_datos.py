@@ -5,8 +5,6 @@ path = Path(__file__).parent
 
 
 
-def read_ventas():
-    df_ventas = pd.read_csv(f'{path}/Ventas.csv', sep=';', low_memory=False)
 
 
 def normalizacion_empleados():
@@ -51,6 +49,9 @@ def normalizacion_ventas():
     # Lugo  pasar columna ventas a entero
     df_ventas['Ventas'] = pd.to_numeric(df_ventas['Ventas'], errors='raise')
 
+    # Combierto la columna ventas a dolares al cambio 0.00023
+    df_ventas['Ventas_dolar'] =  round(df_ventas['Ventas'] * 0.00023,2)
+
     #df_ventas2 = df_ventas2.drop(index=[127265, 127255])
     #print(df_ventas2.Cantidad == '1,006')
     
@@ -64,7 +65,7 @@ def normalizacion_ventas():
 
     #print(df_ventas2[['Fecha','CodigoFamilia','Familia','Cantidad','Ventas']])
     #print(df_ventas2.dtypes)
-    df_ventas.to_csv(f'{path}/empleados_limpio.csv')
+    df_ventas.to_csv(f'{path}/ventas_limpio.csv')
   
   
 
