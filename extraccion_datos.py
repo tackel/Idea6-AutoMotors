@@ -3,10 +3,6 @@ from pathlib import Path
 
 path = Path(__file__).parent
 
-
-
-
-
 def normalizacion_empleados():
     df_empleados = pd.read_csv(f'{path}/Empleados.csv', sep=';')
     print(df_empleados.head())
@@ -27,16 +23,14 @@ def normalizacion_ventas():
     df_ventas = df_ventas.drop_duplicates()
     # Eliminar registros nan
     df_ventas = df_ventas.dropna()
-    #print(df_ventas2)
 
     # pasar columna empleados a numerico
     df_ventas['Empleado'] = df_ventas['Empleado'].astype('int', errors= 'raise')
     # pasar columna fecha a formato fecha
     df_ventas.Fecha = pd.to_datetime(df_ventas['Fecha'], format='%d/%m/%Y')
-
     #pasar columna candad a numerico
     df_ventas['Cantidad'] = pd.to_numeric(df_ventas['Cantidad'], errors='coerce')
-    # obtengo la media para pasar los cambiar los nan
+    # obtengo la media para cambiar los nan
     mean_df = df_ventas['Cantidad'].mean()
     # Cambio nan por el valor medio
     df_ventas.fillna(mean_df, inplace=True)
@@ -51,24 +45,14 @@ def normalizacion_ventas():
 
     # Combierto la columna ventas a dolares al cambio 0.00023
     df_ventas['Ventas_dolar'] =  round(df_ventas['Ventas'] * 0.00023,2)
-
-    #df_ventas2 = df_ventas2.drop(index=[127265, 127255])
-    #print(df_ventas2.Cantidad == '1,006')
-    
-    #df_ventas2['Empleado'] = pd.to_numeric(df_ventas2.Empleado, errors= 'raise')
-    #df_ventas2.Fecha = pd.to_datetime(df_ventas2['Fecha'], format='%d/%m/%Y')
     
     #df_ventas2['Cantidad'] = pd.to_numeric(df_ventas2['Cantidad'], errors='coerce')
     #print(df_ventas2.iloc[107700:107705,8].isna())
 
-    #df_ventas2.Ventas = df_ventas2['Ventas'].astype(float, errors= 'raise')
-
-    #print(df_ventas2[['Fecha','CodigoFamilia','Familia','Cantidad','Ventas']])
-    #print(df_ventas2.dtypes)
     df_ventas.to_csv(f'{path}/ventas_limpio.csv')
   
   
 
 
-#normalizacion_empleados()
+normalizacion_empleados()
 normalizacion_ventas()
