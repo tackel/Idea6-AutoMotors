@@ -5,10 +5,10 @@ path = Path(__file__).parent
 
 def normalizacion_empleados():
     df_empleados = pd.read_csv(f'{path}/Empleados.csv', sep=';')
-    print(df_empleados.head())
+   
     #print(df_empleados.info())
     #print(df_empleados.describe())
-    print(df_empleados.dtypes)
+    
     #print(df_empleados.isna())
     #print(df_empleados.drop_duplicates())
     #print(df_empleados.iloc[:,1])
@@ -39,17 +39,21 @@ def normalizacion_ventas():
 
     # Pasar columna Ventas a float
     # filtrar comillas y comas de la columna ventas.
-    df_ventas['Ventas'] = df_ventas['Ventas'].apply(lambda x : x[:x.find(',')].replace(".",""))
+    
+    df_ventas['Ventas'] = df_ventas['Ventas'].apply(lambda x : x.split(',')[0])
+    df_ventas.Ventas = df_ventas['Ventas'].apply(lambda x : x.replace(".",""))
     # Lugo  pasar columna ventas a entero
+    print(df_ventas.Ventas)
     df_ventas['Ventas'] = pd.to_numeric(df_ventas['Ventas'], errors='raise')
 
     # Combierto la columna ventas a dolares al cambio 0.00023
     df_ventas['Ventas_dolar'] =  round(df_ventas['Ventas'] * 0.00023,2)
-    
+    df_ventas.Ventas_dolar = df_ventas['Ventas_dolar'].apply(lambda x : str(x).replace(".",","))
+   
     #df_ventas2['Cantidad'] = pd.to_numeric(df_ventas2['Cantidad'], errors='coerce')
     #print(df_ventas2.iloc[107700:107705,8].isna())
-
-    df_ventas.to_csv(f'{path}/ventas_limpio.csv')
+    print(df_ventas.info())
+    df_ventas.to_csv(f'{path}/ventas_limpio.csv',sep=';')
   
   
 
